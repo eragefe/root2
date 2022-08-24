@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+  <div id="indexContent">
+     <p align="center"><a href="/"><img src="/static/gdis.png"></a></p>
+     <p align="center"><label>&nbsp;</label></p>
+     <p align="center"><label>&nbsp;</label></p>
+     <p align="center"><label>Update The System Now ?</label></p>
+     <p align="center"><label>&nbsp;</label></p>
+     <p align="center"><label>&nbsp;</label></p>
+     <a href="{{ url_for('update') }}"><button class="button" style="height:60px;width:70px">Yes</button></a> &nbsp; &nbsp; &nbsp;
+     <a href="{{ url_for('no') }}"><button class="button" style="height:60px;width:70px">No</button></a>
+  </div>
+
+{% endblock %}

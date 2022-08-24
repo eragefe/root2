@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <div id="indexContent">
+     <p align="center"><label>&nbsp;</label></p>
+     <p align="center"><label>&nbsp;</label></p>
+
+     <p align="center"><label>Updating The System</label></p>
+  </div>
+{% endblock %}

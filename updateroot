@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd /home/rock
+rm -r root
+git clone https://github.com/eragefe/root
+cd root
+cp -r * /root

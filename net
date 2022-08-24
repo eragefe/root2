@@ -1,0 +1,11 @@
+#!/bin/bash
+
+systemctl stop led
+if [[ $(hostname -I) ]]; then
+    amixer cset numid=3 1 >/dev/nul 2>&1
+    aplay /root/net.wav
+else
+    amixer cset numid=3 1 >/dev/nul 2>&1
+    aplay /root/nonet.wav
+fi
+systemctl start led

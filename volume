@@ -1,0 +1,63 @@
+#!/bin/bash
+
+filter="$(cat /root/filter)"
+input="$(cat /root/input)"
+
+echo 65 >/sys/class/gpio/export
+echo out >/sys/class/gpio/gpio65/direction
+echo 1 >/sys/class/gpio/gpio65/value
+
+if [ "$input" == "(spdif 1)" ]
+then
+   systemctl stop led
+   amixer cset numid=3 0 >/dev/nul
+   amixer cset numid=2 0 >/dev/nul
+fi
+
+if [ "$input" == "(spdif 2)" ]
+then
+   systemctl stop led
+   amixer cset numid=3 0 >/dev/nul
+   amixer cset numid=2 1 >/dev/nul
+fi
+
+if [ "$input" == "(i2s)" ]
+then
+   systemctl stop led
+   amixer cset numid=3 1 >/dev/nul
+fi
+
+while :
+do
+
+if systemctl status led |grep running >/dev/nul 2>&1 && [ "$input" != "(auto select)" ]
+then
+   echo "(auto select)" > /root/input
+fi
+
+if amixer cget numid=4 |grep -v "values=1," |grep values=1 >/dev/nul 2>&1 && amixer cget numid=5 |grep values=0 >/dev/nul 2>&1 && [ "$filter" != "(Slow Rolloff)" ]
+then
+   echo "(Slow Rolloff)" > /root/filter
+fi
+
+if amixer cget numid=4 |grep values=0 >/dev/nul 2>&1 && amixer cget numid=5 |grep values=0 >/dev/nul 2>&1 && [ "$filter" != "(Fast Rolloff)" ]
+then
+   echo "(Fast Rolloff)" > /root/filter
+fi
+
+if amixer cget numid=4 |grep values=2 >/dev/nul 2>&1 && amixer cget numid=5 |grep values=0 >/dev/nul 2>&1 && [ "$filter" != "(Minimal Phase)" ]
+then
+   echo "(Minimal Phase)" > /root/filter
+fi
+
+if amixer cget numid=5 |grep -v "values=1," |grep values=1 >/dev/nul 2>&1 && [ "$filter" != "(N.O.S)" ]
+then
+   echo "(N.O.S)" > /root/filter
+fi
+
+if [ "mpc volume | tr -dc '0-9'" != "cat /root/vol" ]; then
+   sleep 0.2
+   mpc volume | tr -dc '0-9' >/root/vol
+fi
+
+done
