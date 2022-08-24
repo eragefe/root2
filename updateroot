@@ -1,7 +1,10 @@
 #!/bin/bash
 
+if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+then
 cd /home/rock
-rm -r root
-git clone https://github.com/eragefe/root
-cd root
+rm -r root16
+git clone https://github.com/eragefe/root16
+cd root16
 cp -r * /root
+fi
