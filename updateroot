@@ -3,17 +3,17 @@
 if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
 then
 cd /home/rock
-rm -r root16
-git clone https://github.com/eragefe/root16
-cd root16
+rm -r root2
+git clone https://github.com/eragefe/root2
+cd root2
 cp -r * /root
 fi
 
 if i2cget -f -y 1 0x48 64 | grep 0x30 >/dev/nul 2>&1
 then
 cd /home/rock
-rm -r root18
-git clone https://github.com/eragefe/root18
-cd root18
+rm -r root
+git clone https://github.com/eragefe/root
+cd root
 cp -r * /root
 fi
