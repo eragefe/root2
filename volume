@@ -1,5 +1,8 @@
 #!/bin/bash
 
+cp /root/updateroot /usr/sbin/updateroot
+chmod +x /usr/sbin/updateroot
+
 filter="$(cat /root/filter)"
 input="$(cat /root/input)"
 
