@@ -10,6 +10,7 @@ do
        if amixer cget numid=2 | grep "values=1" >/dev/nul 2>&1
        then
           amixer cset numid=2 0 >/dev/nul 2>&1
+          sleep 0.5
        fi
    fi
    if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1
@@ -18,6 +19,7 @@ do
        if amixer cget numid=2 | grep "values=0" >/dev/nul 2>&1
        then
           amixer cset numid=2 1 >/dev/nul 2>&1
+          sleep 0.5
        fi
    fi
 done
