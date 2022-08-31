@@ -55,22 +55,22 @@ def filter():
     if request.method == 'POST':
         b = request.form["filter"]
         if b == "nos":
-           os.system('amixer cset numid=5 1 >/dev/nul')
+           os.system('amixer cset numid=4 1 >/dev/nul')
            os.system('echo "(N.O.S)" > /root/filter')
            os.system('systemctl restart volume')
         if b == "slow":
-           os.system('amixer cset numid=5 0 >/dev/nul')
-           os.system('amixer cset numid=4 1 >/dev/nul')
+           os.system('amixer cset numid=4 0 >/dev/nul')
+           os.system('amixer cset numid=3 1 >/dev/nul')
            os.system('echo "(Slow Rolloff)" > /root/filter')
            os.system('systemctl restart volume')
         if b == "fast":
-           os.system('amixer cset numid=5 0 >/dev/nul')
            os.system('amixer cset numid=4 0 >/dev/nul')
+           os.system('amixer cset numid=3 0 >/dev/nul')
            os.system('echo "(Fast Rolloff)" > /root/filter')
            os.system('systemctl restart volume')
         if b == "min":
-           os.system('amixer cset numid=5 0 >/dev/nul')
-           os.system('amixer cset numid=4 2 >/dev/nul')
+           os.system('amixer cset numid=4 0 >/dev/nul')
+           os.system('amixer cset numid=3 2 >/dev/nul')
            os.system('echo "(Minimal Phase)" > /root/filter')
            os.system('systemctl restart volume')
         return redirect('/')
