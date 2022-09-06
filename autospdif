@@ -6,6 +6,9 @@ do
    then
       echo 0 >/sys/class/gpio/gpio65/value
       sleep 1
+   fi
+   if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+   then
       echo 1 >/sys/class/gpio/gpio65/value
       sleep 1
    fi
