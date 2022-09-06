@@ -55,22 +55,22 @@ def filter():
     if request.method == 'POST':
         b = request.form["filter"]
         if b == "nos":
-           os.system('amixer cset numid=4 1 >/dev/nul')
+           os.system('amixer cset numid=5 1 >/dev/nul')
            os.system('echo "(N.O.S)" > /root/filter')
            os.system('systemctl restart volume')
         if b == "slow":
-           os.system('amixer cset numid=4 0 >/dev/nul')
-           os.system('amixer cset numid=3 1 >/dev/nul')
+           os.system('amixer cset numid=5 0 >/dev/nul')
+           os.system('amixer cset numid=4 1 >/dev/nul')
            os.system('echo "(Slow Rolloff)" > /root/filter')
            os.system('systemctl restart volume')
         if b == "fast":
+           os.system('amixer cset numid=5 0 >/dev/nul')
            os.system('amixer cset numid=4 0 >/dev/nul')
-           os.system('amixer cset numid=3 0 >/dev/nul')
            os.system('echo "(Fast Rolloff)" > /root/filter')
            os.system('systemctl restart volume')
         if b == "min":
-           os.system('amixer cset numid=4 0 >/dev/nul')
-           os.system('amixer cset numid=3 2 >/dev/nul')
+           os.system('amixer cset numid=5 0 >/dev/nul')
+           os.system('amixer cset numid=4 2 >/dev/nul')
            os.system('echo "(Minimal Phase)" > /root/filter')
            os.system('systemctl restart volume')
         return redirect('/')
@@ -84,17 +84,17 @@ def input():
     input = request.form["input"]
     if input == "S1":
          os.system('systemctl stop led')
-         os.system('amixer cset numid=2 0 >/dev/nul')
+         os.system('amixer cset numid=3 0 >/dev/nul')
          os.system('echo 0 >/sys/class/gpio/gpio65/value')
          os.system('echo "(spdif 1)" > /root/input')
     if input == "S2":
          os.system('systemctl stop led')
-         os.system('amixer cset numid=2 0 >/dev/nul')
+         os.system('amixer cset numid=3 0 >/dev/nul')
          os.system('echo 1 >/sys/class/gpio/gpio65/value')
          os.system('echo "(spdif 2)" > /root/input')
     if input == "i2s":
          os.system('systemctl stop led')
-         os.system('amixer cset numid=2 1 >/dev/nul')
+         os.system('amixer cset numid=3 1 >/dev/nul')
          os.system('echo "(i2s)" > /root/input')
     if input == "auto":
          os.system('systemctl start led')
@@ -107,11 +107,11 @@ def input():
 def test():
     test = request.form["test"]
     if test == "channel":
-        os.system('amixer cset numid=2 1 >/dev/nul')
+        os.system('amixer cset numid=3 1 >/dev/nul')
         os.system('aplay -D plughw:0 /root/channel.wav')
         os.system('systemctl restart volume')
     if test == "phase":
-        os.system('amixer cset numid=2 1 >/dev/nul')
+        os.system('amixer cset numid=3 1 >/dev/nul')
         os.system('aplay -D plughw:0 /root/phase.wav')
         os.system('systemctl restart volume')
     if test == "net":
@@ -127,7 +127,7 @@ def power():
 
 @app.route('/reboot', methods = ['GET', 'POST'])
 def reboot():
-    os.system('amixer cset numid=2 1 >/dev/nul')
+    os.system('amixer cset numid=3 1 >/dev/nul')
     os.system('aplay -D plughw:0 /root/reboot.wav')
     os.system('systemctl restart volume')
     os.system('bash -c "sleep 1; reboot"&')

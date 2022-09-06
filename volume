@@ -10,21 +10,21 @@ echo 1 >/sys/class/gpio/gpio65/value
 if [ "$input" == "(spdif 1)" ]
 then
    systemctl stop led
-   amixer cset numid=2 0 >/dev/nul
+   amixer cset numid=3 0 >/dev/nul
    aecho 0 >/sys/class/gpio/gpio65/value
 fi
 
 if [ "$input" == "(spdif 2)" ]
 then
    systemctl stop led
-   amixer cset numid=2 0 >/dev/nul
+   amixer cset numid=3 0 >/dev/nul
    echo 1 >/sys/class/gpio/gpio65/value
 fi
 
 if [ "$input" == "(i2s)" ]
 then
    systemctl stop led
-   amixer cset numid=2 1 >/dev/nul
+   amixer cset numid=3 1 >/dev/nul
 fi
 
 while :
