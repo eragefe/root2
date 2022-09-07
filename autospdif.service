@@ -1,0 +1,11 @@
+[Unit]
+Description=Autospdif service
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=bash /root/autospdif
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
