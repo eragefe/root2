@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo none > /sys/class/leds/rockpis:blue:user/trigger
+amixer cset numid=2 1
 
 while :
 do
