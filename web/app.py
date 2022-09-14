@@ -84,20 +84,24 @@ def input():
     input = request.form["input"]
     if input == "S1":
          os.system('systemctl stop led')
+         os.system('systemctl stop autospdif')
          os.system('amixer cset numid=3 0 >/dev/nul')
          os.system('echo 0 >/sys/class/gpio/gpio65/value')
          os.system('echo "(spdif 1)" > /root/input')
     if input == "S2":
          os.system('systemctl stop led')
+         os.system('systemctl stop autospdif')
          os.system('amixer cset numid=3 0 >/dev/nul')
          os.system('echo 1 >/sys/class/gpio/gpio65/value')
          os.system('echo "(spdif 2)" > /root/input')
     if input == "i2s":
          os.system('systemctl stop led')
+         os.system('systemctl stop autospdif')
          os.system('amixer cset numid=3 1 >/dev/nul')
          os.system('echo "(i2s)" > /root/input')
     if input == "auto":
          os.system('systemctl start led')
+         os.system('systemctl start autospdif')
          os.system('echo "(auto select)" > /root/input')
     with open("/root/input", "r") as f:
          input = f.read()
