@@ -3,6 +3,9 @@
 filter="$(cat /root/filter)"
 input="$(cat /root/input)"
 
+echo 64 >/sys/class/gpio/export
+echo in >/sys/class/gpio/gpio64/direction
+
 echo 65 >/sys/class/gpio/export
 echo out >/sys/class/gpio/gpio65/direction
 echo 1 >/sys/class/gpio/gpio65/value
