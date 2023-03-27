@@ -8,12 +8,14 @@ do
    if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep closed >/dev/nul 2>&1 || i2cget -f -y 1 0x48 64 | grep 0x30 >/dev/nul 2>&1 && cat /sys/class/gpio/gpio64/value |grep 0 >/dev/nul 2>&1
    then
        echo default-on > /sys/class/leds/rockpis:green:power/trigger
+       mpc volume $(cat /root/vol) >/dev/nul 2>&1
+       systemctl start volume
        if amixer cget numid=3 | grep "values=1" >/dev/nul 2>&1
        then
           amixer cset numid=3 0 >/dev/nul 2>&1
        fi
    fi
-   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1 || cat /sys/class/gpio/gpio64/value |grep 1 >/dev/nul 2>&1
+   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1
    then
        echo none > /sys/class/leds/rockpis:green:power/trigger
        if amixer cget numid=3 | grep "values=0" >/dev/nul 2>&1
@@ -21,4 +23,15 @@ do
           amixer cset numid=3 1 >/dev/nul 2>&1
        fi
    fi
+   if  cat /sys/class/gpio/gpio64/value |grep 1 >/dev/nul 2>&1
+   then
+       echo none > /sys/class/leds/rockpis:green:power/trigger
+       systemctl stop volume
+       mpc volume 100 >/dev/nul 2>&1
+       if amixer cget numid=3 | grep "values=0" >/dev/nul 2>&1
+       then
+          amixer cset numid=3 1 >/dev/nul 2>&1
+       fi
+   fi
+
 done
