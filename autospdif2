@@ -1,0 +1,36 @@
+!/bin/bash
+
+echo none > /sys/class/leds/rockpis:blue:user/trigger
+amixer cset numid=2 1 >/dev/nul 2>&1
+
+while :
+do
+   if i2cget -f -y 1 0x48 64 | grep 0x39 >/dev/nul 2>&1
+   then
+      echo none > /sys/class/leds/rockpis:green:power/trigger
+   else
+      echo default-on > /sys/class/leds/rockpis:green:power/trigger
+   fi
+   if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+   then
+      amixer cset numid=3 0 >/dev/nul 2>&1
+      echo 0 >/sys/class/gpio/gpio65/value
+      sleep 1
+      if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+      then
+          amixer cset numid=3 1 >/dev/nul 2>&1
+          sleep 0.5
+      fi
+   fi
+   if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+   then
+      amixer cset numid=3 0 >/dev/nul 2>&1
+      echo 1 >/sys/class/gpio/gpio65/value
+      sleep 1
+      if i2cget -f -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+      then
+          amixer cset numid=3 1 >/dev/nul 2>&1
+          sleep 0.5
+      fi
+   fi
+done
