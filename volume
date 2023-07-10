@@ -15,7 +15,7 @@ if [ "$input" == "(spdif 1)" ]
 then
    systemctl stop led
    amixer cset numid=3 0 >/dev/nul
-   aecho 0 >/sys/class/gpio/gpio65/value
+   echo 0 >/sys/class/gpio/gpio65/value
 fi
 
 if [ "$input" == "(spdif 2)" ]
