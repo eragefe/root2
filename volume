@@ -3,9 +3,6 @@
 filter="$(cat /root/filter)"
 input="$(cat /root/input)"
 
-amixer cset numid=4 2 >/dev/nul
-amixer cset numid=2 1 >/dev/nul
-
 echo 64 >/sys/class/gpio/export
 echo in >/sys/class/gpio/gpio64/direction
 
