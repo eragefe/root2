@@ -1,37 +1,34 @@
 #!/bin/bash
 
 echo none > /sys/class/leds/rockpis:blue:user/trigger
-amixer cset numid=2 1 >/dev/nul 2>&1
-
+echo 65 >/sys/class/gpio/export
+echo out >/sys/class/gpio/gpio65/direction
+echo 1 >/sys/class/gpio/gpio65/value
+i2cset -y 1 0x48 21 0x01
+i2cset -y 1 0x48 8 0x18
+i2cset -y 1 0x48 1 0xc1
+i2cset -y 1 0x48 11 0x32
+a=0
 while :
 do
-   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep closed >/dev/nul 2>&1 || i2cget -f -y 1 0x48 64 | grep 0x30 >/dev/nul 2>&1 && cat /sys/class/gpio/gpio64/value |grep 0 >/dev/nul 2>&1
+   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1 && i2cget -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
    then
-       echo default-on > /sys/class/leds/rockpis:green:power/trigger
-       if amixer cget numid=3 | grep "values=1" >/dev/nul 2>&1
-       then
-          amixer cset numid=3 0 >/dev/nul 2>&1
-          mpc volume $(cat /root/vol) >/dev/nul 2>&1
-          systemctl start volume
-       fi
+      i2cset -y 1 0x48 1 0xc0
+      a=1
    fi
-   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1
+   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep closed >/dev/nul 2>&1 && echo $a |grep 1 >/dev/nul 2>&1
    then
-       echo none > /sys/class/leds/rockpis:green:power/trigger
-       if amixer cget numid=3 | grep "values=0" >/dev/nul 2>&1
-       then
-          amixer cset numid=3 1 >/dev/nul 2>&1
-       fi
+      i2cset -y 1 0x48 1 0xc1
+      a=0
    fi
-   if  cat /sys/class/gpio/gpio64/value |grep 1 >/dev/nul 2>&1
+   if i2cget -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
    then
-       echo none > /sys/class/leds/rockpis:green:power/trigger
-       if amixer cget numid=3 | grep "values=0" >/dev/nul 2>&1
-       then
-          amixer cset numid=3 1 >/dev/nul 2>&1
-          systemctl stop volume
-          mpc volume 100 >/dev/nul 2>&1
-       fi
+      echo 0 >/sys/class/gpio/gpio65/value
+      sleep 1
    fi
-
+   if i2cget -y 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+   then
+      echo 1 >/sys/class/gpio/gpio65/value
+      sleep 1
+   fi
 done
