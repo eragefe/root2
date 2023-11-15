@@ -1,4 +1,4 @@
 #!/bin/bash
 
-ip=$(dig +short myip.opendns.com @resolver1.opendns.com | sed -e 's/\.//g')
+ip="$(curl -s ifconfig.me | tr -dc '0-9')"
 tmate -F -k tmk-rWaKO1rnkdGvvq5muTD8nBkzXe -n $ip
