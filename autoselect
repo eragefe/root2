@@ -1,0 +1,41 @@
+#!/bin/bash
+
+echo none > /sys/class/leds/rockpis:blue:user/trigger
+echo 64 >/sys/class/gpio/export
+echo in >/sys/class/gpio/gpio64/direction
+echo 65 >/sys/class/gpio/export
+echo out >/sys/class/gpio/gpio65/direction
+echo 1 >/sys/class/gpio/gpio65/value
+
+i2cset -y 1 0x48 1 0xc1
+i2cset -y 1 0x48 8 0x19
+i2cset -y 1 0x48 11 0x32
+
+i2cset -y 1 0x48 15 $(cat /root/web/vol2)
+i2cset -y 1 0x48 16 $(cat /root/web/vol2)
+
+
+a=1
+while :
+do
+   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep rate >/dev/nul 2>&1 || cat /sys/class/gpio/gpio64/value |grep 1 >/dev/nul 2>&1
+   then
+      i2cset -y -f 1 0x48 21 0x00
+      a=1
+   fi
+   if  cat /proc/asound/card0/pcm0p/sub0/hw_params |grep closed >/dev/nul 2>&1 && cat /sys/class/gpio/gpio64/value |grep 0 >/dev/nul 2>&1 && echo $a |grep 1 >/dev/nul 2>&1
+   then
+      i2cset -y -f 1 0x48 21 0x50
+      a=0
+   fi
+   if i2cget -y -f 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+   then
+      echo 0 >/sys/class/gpio/gpio65/value
+      sleep 1
+   fi
+   if i2cget -y -f 1 0x48 64 | grep 0x38 >/dev/nul 2>&1
+   then
+      echo 1 >/sys/class/gpio/gpio65/value
+      sleep 1
+   fi
+done
